@@ -1,2 +1,2 @@
 # ruby-warrior
-My Ruby Warrior solution
+My [Ruby Warrior](https://www.bloc.io/ruby-warrior#/) solution
