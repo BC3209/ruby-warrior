@@ -11,9 +11,10 @@ class Player
     rest = WarriorRest.new(warrior)
     health = WarriorHealth.new(warrior)
     captive = RescueCaptive.new(warrior)
+    low_health = WarriorHealthLow.new(warrior)
 
-
-    action_array = [attack, health, walking, captive, rest]
+    # action_array = [walking, attack, health, low_health, rest, captive]
+    action_array = [attack, low_health, health, captive, rest, walking,]
 
     action_array.each do |item|
       # return health at the end of each turn
@@ -36,11 +37,11 @@ end
 
 class Walk < InitializeWarrior
   def question?(health)
-     @warrior.feel.empty? 
+     @warrior.feel.empty?
   end
 
   def action!
-    @warrior.walk!(:backward)
+    @warrior.walk!
   end
 end
 
@@ -86,6 +87,15 @@ class RescueCaptive < InitializeWarrior
   end
 end
 
+class WarriorHealthLow < InitializeWarrior
+  def question?(health)
+     @warrior.health < health && @warrior.feel(:backward).empty? && @warrior.health < 10
+  end
+
+  def action!
+    @warrior.walk!(:backward)
+  end
+end
 # You can walk backward by passing ':backward' as an argument to walk!.
 # Same goes for feel, rescue! and attack!. Archers have a limited attack distance.
 
