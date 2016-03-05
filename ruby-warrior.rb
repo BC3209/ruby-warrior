@@ -13,10 +13,13 @@ class Player
     captive = RescueCaptive.new(warrior)
     low_health = WarriorHealthLow.new(warrior)
     pivot = WarriorPivot.new(warrior)
+    shoot = WarriorShoot.new(warrior)
 
     # action_array = [walking, attack, health, low_health, rest, captive]
     # action_array = [pivot, attack, low_health, health, captive, rest, walking]
-      action_array = [pivot, health, low_health, walking, attack, rest]
+    # action_array = [health, low_health, walking, attack, rest]
+    # action_array = [attack, shoot, low_health, health, captive, walking]
+    action_array = [shoot, captive, walking]
 
     action_array.each do |item|
       # return health at the end of each turn
@@ -106,6 +109,19 @@ class WarriorPivot < InitializeWarrior
 
   def action!
     @warrior.pivot!
+  end
+end
+
+class WarriorShoot < InitializeWarrior
+  def question?(health)
+    # Returns true if the block never returns false of nil
+    # does any space contain an enemy? && !(does any space contain a captive?)
+    # if both of these are true, perform the action
+    @warrior.look.any? { |space| space.enemy? } && !@warrior.look.any? { |space| space.captive? }
+  end
+
+  def action!
+    @warrior.shoot!
   end
 end
 # You can walk backward by passing ':backward' as an argument to walk!.
