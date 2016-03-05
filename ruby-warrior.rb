@@ -12,9 +12,11 @@ class Player
     health = WarriorHealth.new(warrior)
     captive = RescueCaptive.new(warrior)
     low_health = WarriorHealthLow.new(warrior)
+    pivot = WarriorPivot.new(warrior)
 
     # action_array = [walking, attack, health, low_health, rest, captive]
-    action_array = [attack, low_health, health, captive, rest, walking,]
+    # action_array = [pivot, attack, low_health, health, captive, rest, walking]
+      action_array = [pivot, health, low_health, walking, attack, rest]
 
     action_array.each do |item|
       # return health at the end of each turn
@@ -57,7 +59,7 @@ end
 
 class WarriorRest < InitializeWarrior
   def question?(health)
-   if @warrior.health < 20
+   if @warrior.health < 10
      true
    end
   end
@@ -89,11 +91,21 @@ end
 
 class WarriorHealthLow < InitializeWarrior
   def question?(health)
-     @warrior.health < health && @warrior.feel(:backward).empty? && @warrior.health < 10
+     @warrior.health < health && @warrior.feel(:backward).empty? && @warrior.health < 12
   end
 
   def action!
     @warrior.walk!(:backward)
+  end
+end
+
+class WarriorPivot < InitializeWarrior
+  def question?(health)
+    @warrior.feel.wall?
+  end
+
+  def action!
+    @warrior.pivot!
   end
 end
 # You can walk backward by passing ':backward' as an argument to walk!.
